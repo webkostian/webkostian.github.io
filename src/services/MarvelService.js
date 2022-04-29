@@ -1,5 +1,5 @@
 import md5 from "js-md5";
-import useHttp from "../hooks/http.hooks";
+import {useHttp} from '../hooks/http.hook';
 
 const useMarvelService = () => {
   const { loading, error, request, clearError } = useHttp();
@@ -44,7 +44,14 @@ const useMarvelService = () => {
     const tempKey = getTemporaryKey(url);
     const res = await request(`${_apiBase}${url}${tempKey}`);
     return _transformComics(res.data.results[0]);
-}
+  };
+
+  const getCharacterByName = async (name) => { 
+    const url = `characters?name=${name}`;
+    const tempKey = getTemporaryKey(url);
+    const res = await request(`${_apiBase}${url}${tempKey}`);
+    return _transformComics(res.data.results[0]);
+  };
 
   const _transformCharacter = (char) => {
     return {
@@ -62,7 +69,7 @@ const useMarvelService = () => {
 
   const _transformComics = (comics, i) => {
     return {
-      id: comics.id,      
+      id: comics.id,
       title: comics.title,
       description: comics.description || "There is no description",
       pageCount: comics.pageCount
@@ -82,6 +89,7 @@ const useMarvelService = () => {
     clearError,
     getAllComics,
     getComic,
+    getCharacterByName,
   };
 };
 
